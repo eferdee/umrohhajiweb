@@ -1,0 +1,1075 @@
+@import "tailwindcss";
+
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   DESIGN TOKENS — Zafa Travel Admin
+   Palet terinspirasi ubin masjid (teal tua) & aksen emas antik,
+   dipadukan latar sage-off-white yang tenang.
+   ============================================================ */
+@theme {
+    --color-ink: #1c2420;
+    --color-ink-soft: #4b564f;
+
+    --color-primary: #050c69;
+    --color-primary-dark: #03072e;
+    --color-primary-light: #1420a0;
+
+    --color-gold: #d1a954;
+    --color-gold-soft: #ecd9a8;
+
+    --color-paper: #f1f3f0;
+    --color-surface: #ffffff;
+    --color-line: #e3e2da;
+
+    --color-danger: #b3432f;
+    --color-success: #2f6b4f;
+    --color-warning: #b6842a;
+
+    --font-display: "Fraunces", serif;
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+    --radius-card: 18px;
+    --radius-arch: 999px 999px 0 0;
+}
+
+/* ============================================================
+   SIGNATURE VISUAL IDENTITY
+   Motif lattice geometris terinspirasi seni islami (girih),
+   disederhanakan jadi garis tipis modern — dipakai berulang
+   sebagai "sidik jari" visual di berbagai section & kedalaman
+   layer (bukan dekorasi acak, tapi motif yang sama diulang
+   dalam skala/opasitas berbeda).
+   ============================================================ */
+.geo-lattice {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23050c69' stroke-width='0.8'%3E%3Cpath d='M36 0 L54 18 L36 36 L18 18 Z'/%3E%3Cpath d='M0 36 L18 18 L36 36 L18 54 Z'/%3E%3Cpath d='M36 36 L54 18 L72 36 L54 54 Z'/%3E%3Cpath d='M18 54 L36 36 L54 54 L36 72 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 72px 72px;
+}
+.geo-lattice-light {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.8'%3E%3Cpath d='M36 0 L54 18 L36 36 L18 18 Z'/%3E%3Cpath d='M0 36 L18 18 L36 36 L18 54 Z'/%3E%3Cpath d='M36 36 L54 18 L72 36 L54 54 Z'/%3E%3Cpath d='M18 54 L36 36 L54 54 L36 72 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 72px 72px;
+}
+
+/* Grain halus — memberi kedalaman pada bidang gelap/gradient tanpa mengganggu keterbacaan */
+.grain-overlay {
+    position: relative;
+    isolation: isolate;
+}
+.grain-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Parallax ringan — dikendalikan lewat data-parallax pada elemen, dijalankan oleh app.js/inline script */
+[data-parallax] {
+    will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+    [data-parallax] { transform: none !important; }
+}
+
+body {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* ============================================================
+   SIGNATURE ELEMENT — kartu & indikator berbentuk "lengkung mihrab"
+   Dipakai di stat card dashboard dan penanda menu aktif sidebar.
+   ============================================================ */
+.arch-accent {
+    position: relative;
+    overflow: hidden;
+}
+
+.arch-accent::before {
+    content: "";
+    position: absolute;
+    top: -28px;
+    right: -28px;
+    width: 96px;
+    height: 96px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 30%, var(--color-gold-soft), transparent 70%);
+    opacity: 0.55;
+}
+
+.nav-active-indicator {
+    position: relative;
+}
+
+.nav-active-indicator::before {
+    content: "";
+    position: absolute;
+    left: -1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 22px;
+    border-radius: var(--radius-arch);
+    background: var(--color-gold);
+}
+
+/* Scrollbar tipis untuk sidebar */
+.sidebar-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+}
+
+/* ============================================================
+   PUBLIC PAGES — easing & entrance premium bersama
+   Dipindah dari <style> inline welcome.blade.php agar seluruh
+   halaman publik (paket, artikel, galeri, faq, kontak, dst)
+   memakai transisi & animasi yang identik dengan Landing Page.
+   ============================================================ */
+.ease-premium { transition-timing-function: cubic-bezier(.22, 1, .36, 1); }
+.ease-zoom { transition-timing-function: cubic-bezier(.16, 1, .3, 1); }
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+}
+@keyframes floatSlow {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+}
+@keyframes pulseGlow {
+    0%, 100% { opacity: .4; transform: scale(1); }
+    50%      { opacity: .9; transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+    [style*="animation"] { animation: none !important; }
+}
+
+/* ============================================================
+   LANDING PAGE — reveal on scroll, marquee galeri, fade gambar
+   ============================================================ */
+.reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(.22,.61,.36,1), transform 0.7s cubic-bezier(.22,.61,.36,1);
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.fade-img {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.fade-img.is-loaded {
+    opacity: 1;
+}
+
+@keyframes marquee-left {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+}
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-left 42s linear infinite;
+}
+.marquee-track-reverse {
+    animation-name: marquee-right;
+}
+.marquee-row:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .marquee-track { animation: none; }
+}
+
+@media (max-width: 767px) {
+    .marquee-track {
+        animation-duration: 26s;
+    }
+}
+
+/* ============================================================
+   AUTHENTICATION PAGE — single centered premium card
+   ============================================================ */
+.auth-bg {
+    background:
+        radial-gradient(circle at 12% 12%, rgba(5, 12, 105, 0.06), transparent 45%),
+        radial-gradient(circle at 88% 88%, rgba(209, 169, 84, 0.14), transparent 45%),
+        var(--color-paper);
+}
+
+.auth-pattern {
+    background-image:
+        repeating-linear-gradient(45deg, rgba(5, 12, 105, 0.035) 0, rgba(5, 12, 105, 0.035) 1px, transparent 1px, transparent 34px),
+        repeating-linear-gradient(-45deg, rgba(5, 12, 105, 0.035) 0, rgba(5, 12, 105, 0.035) 1px, transparent 1px, transparent 34px);
+    background-position: center;
+}
+
+.auth-glow-primary {
+    background: radial-gradient(circle, rgba(5, 12, 105, 0.18), transparent 70%);
+    filter: blur(6px);
+}
+
+.auth-glow-gold {
+    background: radial-gradient(circle, rgba(209, 169, 84, 0.32), transparent 70%);
+    filter: blur(6px);
+}
+
+@keyframes authCardEnter {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.auth-card-enter {
+    animation: authCardEnter 320ms cubic-bezier(.22, .61, .36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .auth-card-enter { animation: none; }
+}
+
+/* ============================================================
+   ADMIN DASHBOARD 2.0 — perluasan design system
+   Token & komponen baru untuk Admin/Dashboard, dibangun DI ATAS
+   token asli (ink, primary, gold, paper, dst) agar identitas
+   visual Landing Page tetap konsisten. Tidak ada token lama yang
+   diubah — Landing Page & halaman Auth tidak terpengaruh.
+   ============================================================ */
+@theme {
+    /* Netral khusus panel admin — sedikit lebih dingin dari --color-paper
+       agar kartu putih "mengambang" dan enak dipandang lama (dashboard). */
+    --color-admin-bg: #f3f4f0;
+    --color-admin-surface-alt: #f8f9f5;
+    --color-admin-border: #e5e4db;
+
+    /* Emas aman-kontras — dipakai HANYA untuk teks/ikon/aksen kecil,
+       bukan untuk area blok besar. --color-gold asli tetap dipakai
+       untuk highlight/background dekoratif seperti di Landing Page. */
+    --color-gold-ink: #7a5e10;
+    --color-gold-deep: #b9922b;
+
+    /* Warna status tambahan (dipakai chart & badge info netral) */
+    --color-info: #2a5c8a;
+    --color-info-soft: #eaf1f7;
+    --color-warning-ink: #8f5c14;
+
+    /* Palet grafik — diturunkan dari palet brand, bukan warna baru */
+    --color-chart-1: #050c69;
+    --color-chart-2: #b9922b;
+    --color-chart-3: #2f6b4f;
+    --color-chart-4: #2a5c8a;
+    --color-chart-5: #b3432f;
+
+    --shadow-card: 0 1px 2px rgba(28, 36, 32, 0.04), 0 10px 26px -14px rgba(5, 12, 105, 0.14);
+    --shadow-elevated: 0 16px 40px -12px rgba(5, 12, 105, 0.22);
+}
+
+/* Fokus keyboard terlihat jelas di seluruh panel admin (WCAG 2.4.7) */
+.admin-panel :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* --- Kartu KPI ------------------------------------------------ */
+.kpi-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow .25s ease, transform .25s ease;
+}
+.kpi-card:hover {
+    box-shadow: var(--shadow-elevated);
+    transform: translateY(-2px);
+}
+.kpi-card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--kpi-accent, var(--color-primary));
+}
+
+/* --- Panel/section generik ------------------------------------ */
+.dash-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+/* --- Activity Timeline ------------------------------------------ */
+.timeline-list {
+    position: relative;
+    margin-left: 4px;
+    border-left: 2px solid var(--color-line);
+}
+.timeline-item {
+    position: relative;
+    padding-left: 1.5rem;
+}
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: var(--color-surface);
+    border: 2.5px solid var(--dot-color, var(--color-primary));
+}
+
+/* --- System Health ---------------------------------------------- */
+.health-dot { width: 9px; height: 9px; border-radius: 999px; flex-shrink: 0; }
+.health-ok   { background: var(--color-success); }
+.health-warn { background: var(--color-warning-ink); }
+.health-bad  { background: var(--color-danger); }
+
+/* --- Mini kalender jadwal keberangkatan -------------------------- */
+.cal-day {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 12px;
+}
+.cal-day--has-event {
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+}
+.cal-day--today {
+    box-shadow: inset 0 0 0 1.5px var(--color-gold-deep);
+}
+
+/* --- Scrollbar tipis untuk panel terang (notifikasi, timeline) --- */
+.surface-scroll::-webkit-scrollbar { width: 5px; }
+.surface-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--color-admin-border);
+    border-radius: 999px;
+}
+
+/* ============================================================
+   ADMIN CRUD / FORM DESIGN SYSTEM
+   Komponen reusable: tabel modern, search/filter, badge, empty
+   state, bulk action, skeleton loader, toast, dropzone upload.
+   ============================================================ */
+
+/* --- Tabel modern + sticky header (nempel di bawah navbar) --- */
+.admin-table-wrap { overflow-x: auto; }
+.admin-table { width: 100%; font-size: 0.875rem; border-collapse: separate; border-spacing: 0; }
+.admin-table thead th {
+    background: var(--color-admin-surface-alt);
+    text-align: left;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    padding: 0.75rem 1.25rem;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--color-admin-border);
+}
+.admin-table tbody tr { border-bottom: 1px solid var(--color-admin-border); transition: background-color .15s ease; }
+.admin-table tbody tr:last-child { border-bottom: none; }
+.admin-table tbody tr:hover { background: var(--color-admin-surface-alt); }
+.admin-table tbody td { padding: 0.85rem 1.25rem; vertical-align: middle; }
+.admin-table tbody tr.is-selected { background: color-mix(in srgb, var(--color-primary) 6%, white); }
+
+/* --- Search & filter bar --- */
+.filter-input {
+    border: 1px solid var(--color-admin-border);
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem 0.6rem 2.25rem;
+    font-size: 0.875rem;
+    background: var(--color-surface);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.filter-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+.filter-select {
+    border: 1px solid var(--color-admin-border);
+    border-radius: 10px;
+    padding: 0.6rem 2rem 0.6rem 0.9rem;
+    font-size: 0.875rem;
+    background: var(--color-surface);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234b564f' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    background-size: 1rem;
+}
+.filter-select:focus { outline: none; border-color: var(--color-primary); }
+
+/* --- Toolbar pembungkus search/filter (dipakai di semua index CRUD) --- */
+.admin-toolbar {
+    background: var(--color-surface);
+    border: 1px solid var(--color-admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+/* --- Wrapper tabel dengan scroll horizontal di layar kecil --- */
+.admin-table-scroll { overflow-x: auto; }
+
+/* --- Tombol aksi ikon (edit/hapus/detail/pagination) --- */
+.action-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 8px;
+    color: var(--color-ink-soft);
+    border: 1px solid var(--color-admin-border);
+    background: var(--color-surface);
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.action-icon-btn:hover {
+    background: var(--color-admin-surface-alt);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+.action-icon-btn.is-danger:hover {
+    background: color-mix(in srgb, var(--color-danger) 8%, white);
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+/* --- Empty state --- */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 3.5rem 1.5rem; }
+.empty-state-icon {
+    width: 3.5rem; height: 3.5rem; border-radius: 999px;
+    background: var(--color-admin-surface-alt);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-ink-soft);
+    margin-bottom: 1rem;
+}
+
+/* --- Bulk action bar --- */
+.bulk-bar {
+    position: sticky;
+    top: 72px;
+    z-index: 15;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow-elevated);
+}
+
+/* --- Checkbox seragam --- */
+.admin-checkbox {
+    width: 1.05rem; height: 1.05rem;
+    border-radius: 5px;
+    border: 1.5px solid var(--color-admin-border);
+    accent-color: var(--color-primary);
+}
+
+/* --- Skeleton loader (shimmer) --- */
+.skeleton { position: relative; overflow: hidden; background: var(--color-admin-surface-alt); border-radius: 8px; }
+.skeleton::after {
+    content: "";
+    position: absolute; inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: skeleton-shimmer 1.4s infinite;
+}
+@keyframes skeleton-shimmer { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) {
+    .skeleton::after { animation: none; }
+}
+
+/* --- Drag & drop upload zone --- */
+.dropzone {
+    border: 1.5px dashed var(--color-admin-border);
+    border-radius: var(--radius-card);
+    background: var(--color-admin-surface-alt);
+    transition: border-color .15s ease, background-color .15s ease;
+    cursor: pointer;
+}
+.dropzone:hover, .dropzone.is-dragover {
+    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 5%, white);
+}
+
+/* --- Toast --- */
+.toast-stack { position: fixed; top: 5rem; right: 1.25rem; z-index: 100; display: flex; flex-direction: column; gap: 0.6rem; width: min(22rem, calc(100vw - 2.5rem)); }
+.toast-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-admin-border);
+    border-left: 3px solid var(--toast-accent, var(--color-primary));
+    border-radius: 10px;
+    box-shadow: var(--shadow-elevated);
+    padding: 0.85rem 1rem;
+    font-size: 0.8125rem;
+}
+
+/* --- Grouped form section --- */
+.form-section { background: var(--color-surface); border: 1px solid var(--color-admin-border); border-radius: var(--radius-card); }
+.form-section-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--color-admin-border); background: var(--color-admin-surface-alt); border-top-left-radius: var(--radius-card); border-top-right-radius: var(--radius-card); }
+.form-field-label { display: block; font-size: 0.8125rem; font-weight: 500; margin-bottom: 0.375rem; }
+.form-field-input {
+    width: 100%;
+    border: 1px solid var(--color-admin-border);
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.875rem;
+    background: var(--color-surface);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.form-field-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+.form-field-input.is-invalid { border-color: var(--color-danger); }
+.form-field-error { color: var(--color-danger); font-size: 0.75rem; margin-top: 0.3rem; }
+.form-field-valid { color: var(--color-success); font-size: 0.75rem; margin-top: 0.3rem; }
+
+/* ============================================================
+   STATUS BADGE — dipakai <x-admin.status-badge> di Admin & halaman
+   User (mis. Kontak > Cek Status). Sebelumnya class ini dipakai di
+   komponen tapi belum pernah didefinisikan (badge tampil polos).
+   ============================================================ */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+.badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    flex-shrink: 0;
+}
+.badge-success { background: color-mix(in srgb, var(--color-success) 12%, white); color: var(--color-success); }
+.badge-warning { background: color-mix(in srgb, var(--color-warning-ink, var(--color-warning)) 12%, white); color: var(--color-warning-ink, var(--color-warning)); }
+.badge-danger  { background: color-mix(in srgb, var(--color-danger) 12%, white); color: var(--color-danger); }
+.badge-info    { background: var(--color-info-soft, color-mix(in srgb, var(--color-primary) 10%, white)); color: var(--color-info, var(--color-primary)); }
+.badge-neutral { background: var(--color-paper); color: var(--color-ink-soft); }
+
+/* --- Chip label kecil (dipakai di halaman Paket/Booking untuk info sisa kursi, dsb) --- */
+.info-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-line);
+    color: var(--color-ink-soft);
+    background: var(--color-surface);
+}
+
+/* --- Tombol "kembali" bergaya pil, identik dengan articles/show --- */
+.site-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 0.5rem 1rem 0.5rem 0.875rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.site-back-link:hover {
+    color: var(--color-primary);
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+    transform: translateX(-2px);
+}
+
+/* --- Input form publik seragam (Booking, Pembayaran, dsb) --- */
+.site-field-input,
+.site-field-select,
+.site-field-textarea {
+    width: 100%;
+    border: 1px solid var(--color-line);
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    background: var(--color-surface);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.site-field-input:focus,
+.site-field-select:focus,
+.site-field-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+.site-field-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    margin-bottom: 0.375rem;
+}
+.site-field-file {
+    width: 100%;
+    font-size: 0.875rem;
+    color: var(--color-ink-soft);
+}
+.site-field-file::file-selector-button {
+    margin-right: 0.75rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    border: 0;
+    background: color-mix(in srgb, var(--color-primary) 10%, white);
+    color: var(--color-primary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color .15s ease;
+}
+.site-field-file:hover::file-selector-button {
+    background: color-mix(in srgb, var(--color-primary) 16%, white);
+}
+
+/* --- Field bertanda error (real-time validation) --- */
+.site-field-input.is-invalid,
+.site-field-select.is-invalid,
+.site-field-textarea.is-invalid,
+.site-dp-trigger.is-invalid {
+    border-color: var(--color-danger);
+}
+.site-field-input.is-invalid:focus,
+.site-field-select.is-invalid:focus,
+.site-field-textarea.is-invalid:focus,
+.site-dp-trigger.is-invalid:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 15%, transparent);
+}
+.site-field-error {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--color-danger);
+    margin-top: 0.375rem;
+}
+
+/* --- Date picker (dropdown bulan/tahun cepat, cocok untuk tanggal lahir lama) --- */
+.site-dp-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    background: var(--color-surface);
+    text-align: left;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.site-dp-trigger:focus,
+.site-dp-trigger.is-open {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+.site-dp-panel {
+    position: absolute;
+    z-index: 30;
+    margin-top: 0.5rem;
+    width: 100%;
+    min-width: 280px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+    box-shadow: 0 18px 40px -12px rgba(5, 12, 105, 0.18);
+    padding: 0.875rem;
+}
+@media (max-width: 639px) {
+    .site-dp-panel {
+        position: fixed;
+        left: 1rem;
+        right: 1rem;
+        top: 50%;
+        width: auto;
+        transform: translateY(-50%);
+        margin-top: 0;
+    }
+}
+.site-dp-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    border-radius: 999px;
+    font-size: 1.05rem;
+    color: var(--color-ink-soft);
+    transition: background-color .15s ease, color .15s ease;
+}
+.site-dp-nav:hover {
+    background: color-mix(in srgb, var(--color-primary) 8%, white);
+    color: var(--color-primary);
+}
+.site-dp-select {
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8125rem;
+    background: var(--color-surface);
+}
+.site-dp-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+.site-dp-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    color: var(--color-ink);
+    transition: background-color .15s ease, color .15s ease;
+}
+.site-dp-day:hover:not(.site-dp-day-disabled) {
+    background: color-mix(in srgb, var(--color-primary) 8%, white);
+}
+.site-dp-day-today {
+    box-shadow: inset 0 0 0 1.5px var(--color-gold);
+}
+.site-dp-day-selected {
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+}
+.site-dp-day-selected:hover {
+    background: var(--color-primary);
+}
+.site-dp-day-disabled {
+    color: var(--color-line);
+    cursor: not-allowed;
+}
+
+/* --- Step indicator halaman booking --- */
+.site-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.site-step-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1.5px solid var(--color-line);
+    color: var(--color-ink-soft);
+    background: var(--color-surface);
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+.site-step-dot.is-active {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #fff;
+}
+.site-step-dot.is-done {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 8%, white);
+}
+.site-step-line {
+    flex: 1;
+    height: 1.5px;
+    background: var(--color-line);
+    min-width: 1.5rem;
+}
+.site-step-line.is-done {
+    background: var(--color-primary);
+}
+.site-step-label {
+    font-size: 0.75rem;
+    color: var(--color-ink-soft);
+}
+.site-step-label.is-active {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+/* --- Kartu ringkasan detail (label + value grid), dipakai di Paket,
+   Booking, Pembayaran agar tipografi & spacing selalu identik --- */
+.detail-card {
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    border-radius: var(--radius-card);
+}
+.detail-item-label {
+    display: block;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-ink-soft);
+    margin-bottom: 0.2rem;
+}
+
+/* ============================================================
+   PACKAGE DETAIL — sub-nav, timeline itinerary, kartu fasilitas,
+   sticky booking bar (mobile). Dipakai di packages/show.blade.php
+   ============================================================ */
+.pkg-subnav { -ms-overflow-style: none; scrollbar-width: none; }
+.pkg-subnav::-webkit-scrollbar { display: none; }
+.pkg-subnav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    padding: 0.9rem 0.25rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    transition: color .2s ease;
+}
+.pkg-subnav-link:hover { color: var(--color-ink); }
+.pkg-subnav-link.is-active { color: var(--color-primary); }
+.pkg-subnav-link::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--color-gold);
+    opacity: 0;
+    transform: scaleX(0.55);
+    transform-origin: left;
+    transition: opacity .25s ease, transform .25s cubic-bezier(.22,.61,.36,1);
+}
+.pkg-subnav-link.is-active::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.pkg-fact-card {
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.pkg-fact-card:hover { border-color: color-mix(in srgb, var(--color-primary) 25%, transparent); box-shadow: var(--shadow-card, 0 6px 20px -12px rgba(5,12,105,.18)); transform: translateY(-2px); }
+.pkg-fact-icon {
+    flex-shrink: 0;
+    width: 2.5rem; height: 2.5rem;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-primary) 8%, white);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* --- Timeline itinerary --- */
+.pkg-timeline { position: relative; }
+.pkg-timeline-item { position: relative; padding-left: 3rem; }
+.pkg-timeline-item:not(:last-child) { padding-bottom: 2rem; }
+.pkg-timeline-item:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 15px; top: 34px; bottom: -4px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--color-line), transparent);
+}
+.pkg-timeline-dot {
+    position: absolute;
+    left: 0; top: 2px;
+    width: 32px; height: 32px;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 4px var(--color-paper);
+}
+
+/* --- Kartu fasilitas grid --- */
+.pkg-facility-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--color-ink);
+    transition: border-color .2s ease, background-color .2s ease;
+}
+.pkg-facility-card:hover { border-color: color-mix(in srgb, var(--color-success) 30%, transparent); background: color-mix(in srgb, var(--color-success) 4%, white); }
+
+/* --- Sticky booking bar (mobile) --- */
+.pkg-sticky-cta {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-line);
+    box-shadow: 0 -8px 24px -12px rgba(5, 12, 105, 0.18);
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+}
+
+/* --- Progress bar kuota kursi --- */
+.pkg-seat-track { height: 6px; border-radius: 999px; background: var(--color-line); overflow: hidden; }
+.pkg-seat-fill { height: 100%; border-radius: 999px; background: var(--color-primary); transition: width .4s ease; }
+
+/* ============================================================
+   ARTICLE CONTENT — tipografi konten artikel (pengganti plugin
+   @tailwindcss/typography yang tidak ter-install). Menata heading,
+   paragraf, list, quote, gambar, dan link agar konten HTML dari
+   admin (h2/h3/p/ul/blockquote/img, dst.) tampil rapi & premium,
+   konsisten dengan identitas visual Landing Page.
+   ============================================================ */
+.article-content {
+    color: var(--color-ink);
+    font-size: 0.9375rem;
+    line-height: 1.85;
+}
+.article-content > * + * { margin-top: 1.25rem; }
+.article-content > *:first-child { margin-top: 0; }
+
+.article-content h2 {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    line-height: 1.35;
+    color: var(--color-ink);
+    margin-top: 2.25rem;
+    padding-top: 0.25rem;
+}
+.article-content h2:first-child { margin-top: 0; }
+
+.article-content h3 {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    line-height: 1.4;
+    color: var(--color-ink);
+    margin-top: 1.75rem;
+}
+
+.article-content p { color: var(--color-ink-soft); }
+
+.article-content strong { color: var(--color-ink); font-weight: 600; }
+
+.article-content a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
+    transition: text-decoration-color .15s ease;
+}
+.article-content a:hover { text-decoration-color: var(--color-primary); }
+
+.article-content ul, .article-content ol {
+    color: var(--color-ink-soft);
+    padding-left: 1.375rem;
+}
+.article-content ul { list-style: none; }
+.article-content ul li { position: relative; padding-left: 0.25rem; }
+.article-content ul li::before {
+    content: "";
+    position: absolute;
+    left: -1.125rem;
+    top: 0.65em;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-gold);
+    transform: rotate(45deg);
+}
+.article-content ol { list-style: decimal; }
+.article-content ol li::marker { color: var(--color-primary); font-weight: 600; }
+.article-content li + li { margin-top: 0.5rem; }
+
+.article-content blockquote {
+    border-left: 3px solid var(--color-gold);
+    background: var(--color-primary)/5;
+    background: color-mix(in srgb, var(--color-primary) 5%, transparent);
+    border-radius: 0 12px 12px 0;
+    padding: 1rem 1.25rem;
+    font-style: italic;
+    color: var(--color-ink);
+}
+
+.article-content img {
+    width: 100%;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-line);
+}
+
+.article-content hr {
+    border: none;
+    border-top: 1px solid var(--color-line);
+    margin: 2rem 0;
+}
+
+.article-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+.article-content th, .article-content td {
+    border: 1px solid var(--color-line);
+    padding: 0.6rem 0.85rem;
+    text-align: left;
+}
+.article-content th {
+    background: var(--color-paper);
+    font-family: var(--font-display);
+    font-weight: 500;
+}
