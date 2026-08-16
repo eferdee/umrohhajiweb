@@ -35,6 +35,7 @@
         }
         $navLinks = [
             ['href' => '#paket', 'label' => 'Paket'],
+            ['href' => '#alur', 'label' => 'Alur Perjalanan'],
             ['href' => '#artikel', 'label' => 'Artikel'],
             ['href' => '#galeri', 'label' => 'Galeri'],
             ['href' => '#keunggulan', 'label' => 'Keunggulan'],
@@ -145,7 +146,14 @@
                     </a>
                 </div>
 
-                <div class="mt-8 sm:mt-10 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg mx-auto lg:mx-0 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm px-4 sm:px-6 py-5 divide-x divide-white/10 hover:border-white/20 transition-colors duration-300">
+                {{-- Strip kepercayaan singkat — memperkuat kesan resmi & premium sebelum angka statistik --}}
+                <div class="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-[11px] sm:text-xs text-white/50 tracking-wide">
+                    <span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="var(--color-gold-soft)" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Izin Resmi PPIU/PIHK</span>
+                    <span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="var(--color-gold-soft)" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Pembimbing Bersertifikat</span>
+                    <span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="var(--color-gold-soft)" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Dana Talangan Aman</span>
+                </div>
+
+                <div class="mt-6 sm:mt-8 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg mx-auto lg:mx-0 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm px-4 sm:px-6 py-5 divide-x divide-white/10 hover:border-white/20 transition-colors duration-300">
                     <div class="text-center lg:text-left px-1 transition-transform duration-300 hover:-translate-y-0.5">
                         <p class="font-display text-2xl sm:text-3xl text-white">{{ $packages->count() }}+</p>
                         <p class="text-white/55 text-[11px] sm:text-xs mt-1 tracking-wide">Paket Tersedia</p>
@@ -170,6 +178,16 @@
                 <div class="relative w-full max-w-[300px] sm:max-w-[340px] aspect-[4/4.7]">
                     <div class="absolute -inset-3 rounded-[var(--radius-arch)] bg-gradient-to-br from-[var(--color-gold)]/25 via-white/5 to-transparent blur-md"></div>
                     <div class="absolute inset-0 rounded-[var(--radius-arch)] bg-white/5 border border-white/10 animate-[floatSlow_7s_ease-in-out_infinite]"></div>
+
+                    {{-- Bingkai sudut ornamen emas — sentuhan "mewah" khas undangan/pigura klasik --}}
+                    <svg class="absolute -top-2 -left-2 w-9 h-9 sm:w-11 sm:h-11 text-[var(--color-gold-soft)]/70 pointer-events-none z-10" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                        <path d="M2 20V8a6 6 0 016-6h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        <circle cx="2" cy="2" r="1.6" fill="currentColor"/>
+                    </svg>
+                    <svg class="absolute -bottom-2 -right-2 w-9 h-9 sm:w-11 sm:h-11 text-[var(--color-gold-soft)]/70 pointer-events-none z-10 rotate-180" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                        <path d="M2 20V8a6 6 0 016-6h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        <circle cx="2" cy="2" r="1.6" fill="currentColor"/>
+                    </svg>
 
                     <div class="absolute inset-3 sm:inset-4 rounded-[var(--radius-arch)] overflow-hidden border border-[var(--color-gold)]/30 shadow-2xl shadow-black/30">
                         @if ($heroImage && $heroImage->file_path)
@@ -271,6 +289,53 @@
                             <h3 class="relative font-display text-lg">{{ $f['title'] }}</h3>
                             <p class="relative text-sm text-[var(--color-ink-soft)] mt-1.5 leading-relaxed">{{ $f['desc'] }}</p>
                         </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ============ ALUR PERJALANAN — storytelling langkah demi langkah, section baru ============ --}}
+    <section id="alur" class="relative overflow-hidden bg-[var(--color-primary-dark)] grain-overlay">
+        <div class="absolute inset-0 geo-lattice-light opacity-[0.045]" aria-hidden="true"></div>
+        <div class="absolute left-1/2 -translate-x-1/2 -top-20 w-[32rem] h-[32rem] rounded-full bg-[var(--color-gold)]/[0.07] blur-[110px] pointer-events-none" aria-hidden="true"></div>
+        <x-site.emblem class="hidden lg:block absolute right-10 bottom-10 w-10 h-10 text-white/[0.06]" />
+
+        <div class="relative max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+            <div class="text-center max-w-xl mx-auto mb-12 sm:mb-16 reveal">
+                <div class="flex items-center justify-center gap-3 mb-3">
+                    <span class="h-px w-8 bg-gradient-to-r from-transparent to-[var(--color-gold)]/70"></span>
+                    <x-site.emblem class="w-3 h-3 text-[var(--color-gold)]" />
+                    <span class="h-px w-8 bg-gradient-to-l from-transparent to-[var(--color-gold)]/70"></span>
+                </div>
+                <span class="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--color-gold-soft)]">Dari Niat Hingga Pulang</span>
+                <h2 class="font-display text-2xl sm:text-3xl mt-1.5 text-white text-balance">Alur Perjalanan Bersama Kami</h2>
+                <p class="text-sm text-white/60 mt-3">Setiap tahap kami dampingi, agar Anda cukup fokus pada niat dan ibadah.</p>
+            </div>
+
+            <div class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-4">
+                {{-- Garis penghubung horizontal khas, senada dengan section Keunggulan --}}
+                <svg class="hidden lg:block absolute top-[26px] left-[10%] right-[10%] w-[80%] h-4 -z-0 opacity-30 pointer-events-none" viewBox="0 0 800 20" preserveAspectRatio="none" aria-hidden="true">
+                    <line x1="0" y1="10" x2="800" y2="10" stroke="var(--color-gold-soft)" stroke-width="1.2" stroke-dasharray="1 10" stroke-linecap="round"/>
+                </svg>
+
+                @php
+                    $journey = [
+                        ['title' => 'Konsultasi', 'desc' => 'Diskusikan kebutuhan &amp; anggaran bersama tim kami, gratis tanpa komitmen.'],
+                        ['title' => 'Pendaftaran', 'desc' => 'Isi data jamaah &amp; unggah dokumen langsung dari dashboard online.'],
+                        ['title' => 'Manasik', 'desc' => 'Ikuti pembekalan bersama ustadz pembimbing sebelum keberangkatan.'],
+                        ['title' => 'Keberangkatan', 'desc' => 'Terbang bersama rombongan dengan pendampingan penuh selama ibadah.'],
+                        ['title' => 'Pulang & Kenangan', 'desc' => 'Tiba kembali dengan hati tenang &amp; dokumentasi perjalanan lengkap.'],
+                    ];
+                @endphp
+
+                @foreach ($journey as $i => $step)
+                    <div class="reveal relative z-10 text-center lg:text-left" style="transition-delay:{{ $i * 80 }}ms">
+                        <span class="relative inline-flex w-12 h-12 rounded-full items-center justify-center bg-[var(--color-primary-dark)] border-2 border-[var(--color-gold)] font-display text-base text-[var(--color-gold-soft)] mb-4 shadow-lg shadow-black/30">
+                            0{{ $i + 1 }}
+                        </span>
+                        <h3 class="font-display text-base sm:text-lg text-white">{{ $step['title'] }}</h3>
+                        <p class="text-xs sm:text-[13px] text-white/55 mt-1.5 leading-relaxed max-w-[15rem] mx-auto lg:mx-0">{!! $step['desc'] !!}</p>
                     </div>
                 @endforeach
             </div>
@@ -568,6 +633,7 @@
             <div class="absolute left-1/2 -translate-x-1/2 -top-10 w-[28rem] h-[28rem] rounded-full bg-[var(--color-primary)]/[0.04] blur-3xl -z-10 pointer-events-none" aria-hidden="true"></div>
             <div class="absolute -left-20 bottom-6 w-56 h-56 rounded-full border border-[var(--color-primary)]/10 -z-10 pointer-events-none hidden sm:block" aria-hidden="true"></div>
             <div class="absolute inset-x-0 top-1/3 h-64 geo-lattice opacity-[0.025] -z-10 pointer-events-none" aria-hidden="true"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" class="hidden sm:block absolute right-2 top-2 w-28 h-28 lg:w-36 lg:h-36 text-[var(--color-primary)]/[0.04] -z-10 pointer-events-none" aria-hidden="true"><path d="M10 8c-3.3 0-6 2.7-6 6v10h10V14H8c0-2.2 1.8-4 4-4V8zm14 0c-3.3 0-6 2.7-6 6v10h10V14h-6c0-2.2 1.8-4 4-4V8z"/></svg>
 
             {{-- Header split — judul di kiri, kontrol navigasi di kanan (bukan judul tengah seperti section lain) --}}
             <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-8 sm:mb-10 reveal">
@@ -578,6 +644,16 @@
                     </div>
                     <span class="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--color-primary)]">Cerita Jamaah</span>
                     <h2 class="font-display text-2xl sm:text-3xl mt-1.5">Apa Kata Mereka</h2>
+                    @php $avgRatingT = \App\Models\Testimonial::where('is_published', true)->avg('rating'); @endphp
+                    <div class="inline-flex items-center gap-2 mt-3 px-3.5 py-1.5 rounded-full bg-[var(--color-gold)]/10 border border-[var(--color-gold)]/25">
+                        <div class="flex text-[var(--color-gold)]">
+                            @for ($k = 0; $k < 5; $k++)
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="{{ $k < round($avgRatingT ?: 5) ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1" class="w-3.5 h-3.5"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.958a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.447a1 1 0 00-.363 1.118l1.287 3.957c.299.921-.755 1.688-1.538 1.118l-3.367-2.447a1 1 0 00-1.176 0l-3.367 2.447c-.783.57-1.837-.197-1.538-1.118l1.287-3.957a1 1 0 00-.363-1.118L2.062 9.385c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.287-3.958z"/></svg>
+                            @endfor
+                        </div>
+                        <span class="text-xs font-semibold text-[var(--color-ink)]">{{ $avgRatingT ? number_format($avgRatingT, 1) : '5.0' }}/5</span>
+                        <span class="text-xs text-[var(--color-ink-soft)]">&middot; {{ $testimonials->count() }}+ ulasan jamaah</span>
+                    </div>
                 </div>
                 <div class="hidden sm:flex items-center gap-2 shrink-0">
                     <button type="button" @click="track.scrollBy({ left: -360, behavior: 'smooth' })"
