@@ -259,39 +259,39 @@
             <h2 class="font-display text-2xl sm:text-3xl mt-1.5">Ibadah Nyaman, Hati Tenang</h2>
         </div>
 
-        {{-- Jalur penghubung — mengubah grid rata jadi narasi berurutan, bukan tumpukan card --}}
-        <div class="relative">
-            <svg class="hidden lg:block absolute top-[38px] left-[12.5%] right-[12.5%] w-[75%] h-8 -z-10 opacity-25 pointer-events-none" viewBox="0 0 800 40" preserveAspectRatio="none" aria-hidden="true">
-                <path d="M0 6 Q 100 34 267 20 T 533 20 T 800 6" fill="none" stroke="var(--color-gold)" stroke-width="1.5" stroke-dasharray="1 10" stroke-linecap="round"/>
-            </svg>
+        @php
+            $features = [
+                ['title' => 'Pembimbing Berpengalaman', 'desc' => 'Ustadz pembimbing mendampingi penuh dari manasik hingga di tanah suci.', 'icon' => 'M4.5 12.75l6 6 9-13.5'],
+                ['title' => 'Harga Transparan', 'desc' => 'Rincian biaya jelas sejak awal, tanpa tambahan tersembunyi.', 'icon' => 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33'],
+                ['title' => 'Hotel Dekat Masjid', 'desc' => 'Akomodasi terpilih dalam jangkauan berjalan kaki ke Masjidil Haram/Nabawi.', 'icon' => 'M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21'],
+                ['title' => 'Layanan 24 Jam', 'desc' => 'Tim kami siap membantu jamaah kapan pun selama perjalanan berlangsung.', 'icon' => 'M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
+            ];
+        @endphp
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
-                @php
-                    $features = [
-                        ['title' => 'Pembimbing Berpengalaman', 'desc' => 'Ustadz pembimbing mendampingi penuh dari manasik hingga di tanah suci.', 'icon' => 'M4.5 12.75l6 6 9-13.5'],
-                        ['title' => 'Harga Transparan', 'desc' => 'Rincian biaya jelas sejak awal, tanpa tambahan tersembunyi.', 'icon' => 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33'],
-                        ['title' => 'Hotel Dekat Masjid', 'desc' => 'Akomodasi terpilih dalam jangkauan berjalan kaki ke Masjidil Haram/Nabawi.', 'icon' => 'M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21'],
-                        ['title' => 'Layanan 24 Jam', 'desc' => 'Tim kami siap membantu jamaah kapan pun selama perjalanan berlangsung.', 'icon' => 'M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
-                    ];
-                @endphp
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+            @foreach ($features as $i => $f)
+                <div class="reveal group relative bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 border border-[var(--color-line)] overflow-hidden hover:-translate-y-2 hover:border-[var(--color-gold)]/40 hover:shadow-2xl hover:shadow-[var(--color-primary)]/10 transition-all duration-500 ease-premium"
+                     style="transition-delay:{{ $i * 80 }}ms">
 
-                @foreach ($features as $i => $f)
-                    <div class="reveal {{ $i % 2 === 1 ? 'lg:mt-10' : '' }}" style="transition-delay:{{ $i * 70 }}ms">
-                        <span class="hidden lg:flex relative z-10 w-9 h-9 rounded-full bg-[var(--color-paper)] border-2 border-[var(--color-gold)] items-center justify-center font-display text-xs text-[var(--color-primary)] mb-4 mx-auto shadow-sm shadow-[var(--color-gold)]/30">0{{ $i + 1 }}</span>
-                        <div class="group arch-accent relative bg-[var(--color-surface)] rounded-[var(--radius-card)] p-5 border border-[var(--color-line)] overflow-hidden hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[var(--color-primary)]/5 hover:border-[var(--color-primary)]/20 transition-all duration-300 ease-premium">
-                            <span class="absolute top-0 left-0 h-[3px] w-0 bg-gradient-to-r from-[var(--color-gold)] to-[var(--color-primary)] group-hover:w-full transition-all duration-500 ease-premium"></span>
-                            <span class="lg:hidden absolute top-4 right-5 font-display text-3xl text-[var(--color-primary)]/[0.06] select-none">0{{ $i + 1 }}</span>
-                            <div class="relative w-10 h-10 rounded-full bg-[var(--color-primary)]/10 ring-1 ring-[var(--color-gold)]/20 flex items-center justify-center text-[var(--color-primary)] mb-3 group-hover:bg-[var(--color-primary)] group-hover:ring-[var(--color-primary)]/40 group-hover:text-white transition-all duration-300 ease-premium">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="{{ $f['icon'] }}" />
-                                </svg>
-                            </div>
-                            <h3 class="relative font-display text-lg">{{ $f['title'] }}</h3>
-                            <p class="relative text-sm text-[var(--color-ink-soft)] mt-1.5 leading-relaxed">{{ $f['desc'] }}</p>
+                    {{-- garis emas tipis di atas — muncul saat hover --}}
+                    <span class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--color-gold)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></span>
+
+                    {{-- angka hantu raksasa di pojok — sentuhan mewah khas kartu premium --}}
+                    <span class="absolute -right-2 -top-5 font-display text-[6rem] leading-none text-[var(--color-primary)]/[0.05] select-none group-hover:text-[var(--color-gold)]/[0.09] transition-colors duration-500" aria-hidden="true">0{{ $i + 1 }}</span>
+
+                    <div class="relative">
+                        <div class="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] flex items-center justify-center text-white shadow-lg shadow-[var(--color-primary)]/20 group-hover:scale-110 transition-all duration-500">
+                            <span class="absolute inset-0 rounded-2xl bg-[var(--color-gold)] opacity-0 blur-md group-hover:opacity-30 transition-opacity duration-500" aria-hidden="true"></span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="relative w-5.5 h-5.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="{{ $f['icon'] }}" />
+                            </svg>
                         </div>
+
+                        <h3 class="font-display text-lg mt-4 group-hover:text-[var(--color-primary)] transition-colors duration-300">{{ $f['title'] }}</h3>
+                        <p class="text-sm text-[var(--color-ink-soft)] mt-1.5 leading-relaxed">{{ $f['desc'] }}</p>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
     </section>
 
@@ -313,31 +313,40 @@
                 <p class="text-sm text-white/60 mt-3">Setiap tahap kami dampingi, agar Anda cukup fokus pada niat dan ibadah.</p>
             </div>
 
-            <div class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-4">
-                {{-- Garis penghubung horizontal khas, senada dengan section Keunggulan --}}
+            @php
+                $journey = [
+                    ['title' => 'Konsultasi', 'desc' => 'Diskusikan kebutuhan &amp; anggaran bersama tim kami, gratis tanpa komitmen.', 'icon' => 'M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z'],
+                    ['title' => 'Pendaftaran', 'desc' => 'Isi data jamaah &amp; unggah dokumen langsung dari dashboard online.', 'icon' => 'M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M18.75 18.75V9.375c0-.621-.504-1.125-1.125-1.125H8.25m6.75 0A2.25 2.25 0 0012.75 6h-1.5a2.25 2.25 0 00-2.25 2.25m6.75 0v.108c0 .478-.379.879-.858.914-.712.052-1.427.087-2.142.104M8.25 8.25v.108c0 .478.379.879.858.914.712.052 1.427.087 2.142.104m0 0V21m-4.5-9.375c0-.621.504-1.125 1.125-1.125h.75m-1.875 1.125v9c0 .621.504 1.125 1.125 1.125h.75'],
+                    ['title' => 'Manasik', 'desc' => 'Ikuti pembekalan bersama ustadz pembimbing sebelum keberangkatan.', 'icon' => 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5'],
+                    ['title' => 'Keberangkatan', 'desc' => 'Terbang bersama rombongan dengan pendampingan penuh selama ibadah.', 'icon' => 'M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5'],
+                    ['title' => 'Pulang &amp; Kenangan', 'desc' => 'Tiba kembali dengan hati tenang &amp; dokumentasi perjalanan lengkap.', 'icon' => 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z'],
+                ];
+            @endphp
+
+            <div class="relative">
+                {{-- Garis timeline: kiri-align di mobile/tablet (jalur ke bawah), tengah-atas di desktop (jalur horizontal) --}}
+                <div class="absolute left-[27px] lg:hidden top-2 bottom-2 w-px bg-gradient-to-b from-[var(--color-gold)]/70 via-white/15 to-[var(--color-gold)]/70" aria-hidden="true"></div>
                 <svg class="hidden lg:block absolute top-[26px] left-[10%] right-[10%] w-[80%] h-4 -z-0 opacity-30 pointer-events-none" viewBox="0 0 800 20" preserveAspectRatio="none" aria-hidden="true">
                     <line x1="0" y1="10" x2="800" y2="10" stroke="var(--color-gold-soft)" stroke-width="1.2" stroke-dasharray="1 10" stroke-linecap="round"/>
                 </svg>
 
-                @php
-                    $journey = [
-                        ['title' => 'Konsultasi', 'desc' => 'Diskusikan kebutuhan &amp; anggaran bersama tim kami, gratis tanpa komitmen.'],
-                        ['title' => 'Pendaftaran', 'desc' => 'Isi data jamaah &amp; unggah dokumen langsung dari dashboard online.'],
-                        ['title' => 'Manasik', 'desc' => 'Ikuti pembekalan bersama ustadz pembimbing sebelum keberangkatan.'],
-                        ['title' => 'Keberangkatan', 'desc' => 'Terbang bersama rombongan dengan pendampingan penuh selama ibadah.'],
-                        ['title' => 'Pulang & Kenangan', 'desc' => 'Tiba kembali dengan hati tenang &amp; dokumentasi perjalanan lengkap.'],
-                    ];
-                @endphp
-
-                @foreach ($journey as $i => $step)
-                    <div class="reveal relative z-10 text-center lg:text-left" style="transition-delay:{{ $i * 80 }}ms">
-                        <span class="relative inline-flex w-12 h-12 rounded-full items-center justify-center bg-[var(--color-primary-dark)] border-2 border-[var(--color-gold)] font-display text-base text-[var(--color-gold-soft)] mb-4 shadow-lg shadow-black/30">
-                            0{{ $i + 1 }}
-                        </span>
-                        <h3 class="font-display text-base sm:text-lg text-white">{{ $step['title'] }}</h3>
-                        <p class="text-xs sm:text-[13px] text-white/55 mt-1.5 leading-relaxed max-w-[15rem] mx-auto lg:mx-0">{!! $step['desc'] !!}</p>
-                    </div>
-                @endforeach
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-4">
+                    @foreach ($journey as $i => $step)
+                        <div class="reveal group relative z-10 flex lg:flex-col items-start lg:items-start gap-4 lg:gap-0 text-left lg:text-left" style="transition-delay:{{ $i * 80 }}ms">
+                            <span class="relative shrink-0 inline-flex w-14 h-14 rounded-full items-center justify-center bg-[var(--color-primary-dark)] border-2 border-[var(--color-gold)]/80 text-[var(--color-gold-soft)] mb-0 lg:mb-4 shadow-lg shadow-black/30 group-hover:border-[var(--color-gold)] group-hover:scale-105 transition-all duration-300">
+                                <span class="absolute inset-0 rounded-full bg-[var(--color-gold)]/15 blur-md" aria-hidden="true"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.4" stroke="currentColor" class="relative w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="{{ $step['icon'] }}" />
+                                </svg>
+                            </span>
+                            <div class="pt-1 lg:pt-0">
+                                <span class="text-[11px] uppercase tracking-widest text-[var(--color-gold-soft)]/70">Langkah 0{{ $i + 1 }}</span>
+                                <h3 class="font-display text-base sm:text-lg text-white mt-0.5">{{ $step['title'] }}</h3>
+                                <p class="text-xs sm:text-[13px] text-white/55 mt-1.5 leading-relaxed lg:max-w-[15rem]">{!! $step['desc'] !!}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </section>
